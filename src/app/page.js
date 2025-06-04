@@ -1,9 +1,23 @@
 "use client";
+
+import { useState } from "react";
 import Head from "next/head";
 
 export default function Home() {
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [currentPlayer, setCurrentPlayer] = useState(true); // true for X, false for O
+
   const handleClick = (index) => {
-    console.log(`Square ${index} clicked!`);
+    // Don't allow click if square is already filled
+    if (board[index]) return;
+
+    // Create new board with the move
+    const newBoard = board.slice();
+    newBoard[index] = currentPlayer ? "X" : "O";
+
+    // Update state
+    setBoard(newBoard);
+    setXIsNext(!xIsNext);
   };
 
   return (
@@ -11,14 +25,23 @@ export default function Home() {
       <div className="game-container">
         <div className="game">
           <h1>Tic Tac Toe</h1>
+          <div className="game-info">
+            <div className="status">
+              Next player: {currentPlayer ? "X" : "O"}
+            </div>
+          </div>
+
           <div className="game-board">
             <div className="board">
               {Array(9)
                 .fill(null)
                 .map((_, index) => (
                   <button
-                    key={index} className="board-cell" onClick={() => handleClick(i)}>
-                    {/* Placeholder for game cells*/}
+                    key={index}
+                    className="board-cell"
+                    onClick={() => handleClick(index)}
+                  >
+                    {board[index]}
                   </button>
                 ))}
             </div>
@@ -52,6 +75,17 @@ export default function Home() {
           margin-bottom: 20px;
           font-size: 2.5rem;
           text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .game-info {
+          margin-bottom: 20px;
+        }
+        .status {
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: #555;
+          padding: 10px;
+          border-radius: 8px;
+          background: #f8f9fa;
         }
         .board {
           display: grid;
