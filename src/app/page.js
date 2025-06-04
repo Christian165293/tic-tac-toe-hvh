@@ -4,12 +4,15 @@ import { useState } from "react";
 import Head from "next/head";
 
 export default function Home() {
+  //initialize state for the game board and current player
   const [board, setBoard] = useState(Array(9).fill(null));
   const [currentPlayer, setCurrentPlayer] = useState(true); // true for X, false for O
 
+  //Determine the winner
   const winner = calculateWinner(board);
   const isDraw = !winner && board.every((cell) => cell !== null);
 
+  // Handle click on a board cell
   const handleClick = (index) => {
     // Don't allow click if square is already filled
     if (board[index] || winner) return;
@@ -21,6 +24,12 @@ export default function Home() {
     // Update state
     setBoard(newBoard);
     setCurrentPlayer(!currentPlayer);
+  };
+
+  //Reset the gaem
+  const resetGame = () => {
+    setBoard(Array(9).fill(null));
+    setCurrentPlayer(true);
   };
 
   return (
@@ -53,6 +62,9 @@ export default function Home() {
                 ))}
             </div>
           </div>
+          <button className="reset-button" onClick={resetGame}>
+            Reset Game
+          </button>
         </div>
       </div>
 
@@ -62,7 +74,7 @@ export default function Home() {
           justify-content: center;
           align-items: center;
           min-height: 100vh;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: #800000;
           font-family: "Arial", sans-serif;
           padding: 20px;
         }
@@ -122,11 +134,28 @@ export default function Home() {
           background: #e9ecef;
           transform: scale(1.05);
         }
+        .reset-button {
+          background: #800000
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          font-size: 1.1rem;
+          border-radius: 25px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          margin-top: 20px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .reset-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
       `}</style>
     </>
   );
 }
 
+// Function to calculate the winner
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2], // top row
